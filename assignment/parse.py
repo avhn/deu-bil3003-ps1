@@ -17,13 +17,16 @@ def normalize(value):
 
 def parse_dataset(filename='dataset.csv'):
 
-    """Parse .csv file.
+    """
+    Parse .csv file.
 
     Args:
-        filename: 
+        filename: name of the .csv file
 
     Returns:
-
+        Parsed dataset as list of lists with first index being the indicator of column.
+        For example:
+            [[ind1, ...], [ind2, ...], [ind3, ...] ...]
     """
 
     dataset = list()
