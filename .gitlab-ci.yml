@@ -1,5 +1,5 @@
-image: "python:3.7-alphine3.9"
+image: "python:3.7"
 
-testfile:
-	script:
-	- python test.py
+test:
+    script:
+        - python3 test.py
