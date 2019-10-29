@@ -1,5 +1,5 @@
 import unittest
-from assignment import parse
+from problemset import parse
 
 
 class ParseTests(unittest.TestCase):
