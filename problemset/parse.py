@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def normalize(value):
 
     """Convert a String object to floating or decimal if possible."""

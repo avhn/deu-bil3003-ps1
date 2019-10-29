@@ -2,4 +2,4 @@
 
 from problemset import interact
 
-interact.get_input()
+support_value, metric, leverage_value = interact.get_input()
