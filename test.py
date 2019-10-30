@@ -1,4 +1,5 @@
 import unittest
+import random
 from problemset import parse
 
 
@@ -14,10 +15,19 @@ class ParseTests(unittest.TestCase):
         assert str == type(parse.normalize(self.sampleString))
 
     def test_parse_dataset(self):
-        indicators, dataset = parse.parse_dataset()
-        # may do more extensive test later
-        if not indicators or not dataset or len(dataset[0]) < 2:
-            raise ValueError('Dataset is not parsed properly.')
+        itemsets = parse.parse_dataset()
+        assert itemsets and type(itemsets) is list
+        itemset = itemsets[0]
+        assert itemset and type(itemset) is set
+        item = random.choice(tuple(itemset))
+        assert item and type(item) is tuple
+
+    def test_generate_frequent_itemsets(self):
+        frequent_itemsets = parse.parse_dataset()
+
+        pass
+
+        print("Unreachable statement")
 
 
 if __name__ == '__main__':
