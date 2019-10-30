@@ -23,7 +23,7 @@ class ParseTests(unittest.TestCase):
         assert item and type(item) is tuple
 
     def test_generate_frequent_itemsets(self):
-        frequent_itemsets = parse.parse_dataset()
+        dataset = parse.parse_dataset()
 
         pass
 
