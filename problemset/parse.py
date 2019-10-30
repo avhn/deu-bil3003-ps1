@@ -2,9 +2,8 @@
 
 
 def normalize(value):
-
     """Convert a String object to floating or decimal if possible."""
-    
+
     try:
         if value.isdigit():
             result = int(value)
@@ -13,11 +12,12 @@ def normalize(value):
         return result
 
     except (ValueError, AttributeError):
+        if value:  # not None
+            value = value.strip()
         return value
 
 
 def parse_dataset(filename='dataset.csv'):
-
     """
     Parse .csv file.
 
@@ -27,18 +27,21 @@ def parse_dataset(filename='dataset.csv'):
     Returns:
         Parsed dataset as list of lists with first index being the indicator of column.
         For example:
-            [[ind1, ...], [ind2, ...], [ind3, ...] ...]
+            (ind1, ind2, ...), [(val1, val2, ...), (val1, val2, ...) ...]
     """
 
+    indicators = None
     dataset = list()
     with open(filename, 'r') as file:
-        for line in file:
+        for iter, line in enumerate(file):
             line = line.strip().split(',')
-            if len(dataset) == 0:
-                dataset = [[item] for item in line]
+            if iter is 0:
+                indicators = tuple([item.strip() for item in line])
             else:
-                for i, item in enumerate(line):
+                items = list()
+                for item in line:
                     if item == '?':
                         item = None
-                    dataset[i].append(normalize(item))
-    return dataset
+                    items.append(normalize(item))
+                dataset.append(tuple(items))
+    return indicators, dataset
