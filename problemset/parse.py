@@ -12,9 +12,7 @@ def normalize(value):
         return result
 
     except (ValueError, AttributeError):
-        if value:  # not None
-            value = value.strip()
-        return value
+        return value.strip()
 
 
 def parse_dataset(filename='dataset.csv'):
@@ -25,23 +23,24 @@ def parse_dataset(filename='dataset.csv'):
         filename: name of the .csv file
 
     Returns:
-        Parsed dataset as list of lists with first index being the indicator of column.
-        For example:
-            (ind1, ind2, ...), [(val1, val2, ...), (val1, val2, ...) ...]
+        Parsed dataset as list of itemsets, where items are tuples.
+        Pseudo representation as below:
+            list[set{tuple(ind, val), ...}, set{tuple(ind, val), ...}, ...]
     """
 
-    indicators = None
-    dataset = list()
+    if not filename:
+        return parse_dataset()
+
+    indicators = tuple()
+    itemsets = list()
     with open(filename, 'r') as file:
-        for iter, line in enumerate(file):
+        for i, line in enumerate(file):
             line = line.strip().split(',')
-            if iter is 0:
+            if i is 0:  # get indicators
                 indicators = tuple([item.strip() for item in line])
-            else:
-                items = list()
-                for item in line:
-                    if item == '?':
-                        item = None
-                    items.append(normalize(item))
-                dataset.append(tuple(items))
-    return indicators, dataset
+            else:   # create itemset and add to itemsets
+                itemset = set()
+                for j, item in enumerate(line):
+                    itemset.add((indicators[j], normalize(item)))
+                itemsets.append(itemset)
+    return itemsets
