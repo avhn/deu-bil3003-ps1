@@ -2,4 +2,10 @@
 
 from problemset import interact
 
-support_value, metric, leverage_value = interact.get_input()
+
+def main():
+    support_value, metric, leverage_value = interact.get_input()    
+
+    
+if __name__ = '__main__':
+    main()
