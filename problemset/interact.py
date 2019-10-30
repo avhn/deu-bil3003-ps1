@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from .metric_options import Metric
+from .metrics import Metric
 
 
 def get_input():

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-def normalize(value):
+def normalize(value: str):
     """Convert a String object to floating or decimal if possible."""
 
+    value = value.strip()
     try:
         if value.isdigit():
             result = int(value)
@@ -12,15 +13,17 @@ def normalize(value):
         return result
 
     except (ValueError, AttributeError):
-        return value.strip()
+        if value is '?':
+            return None
+        return value
 
 
-def parse_dataset(filename='dataset.csv'):
+def parse_dataset(filename: str = 'dataset.csv'):
     """
     Parse .csv file.
 
     Args:
-        filename: name of the .csv file
+        filename: name or path of the .csv file
 
     Returns:
         Parsed dataset as list of itemsets, where items are tuples.
