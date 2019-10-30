@@ -5,8 +5,8 @@ from problemset import parse, generate
 
 
 def dev_test():
-    dataset = parse.parse_dataset(None)
-    generate.frequent_itemsets(0.5, dataset)
+    dataset = parse.parse_dataset()
+    generate.frequent_itemsets(0.04, dataset)
 
 
 def main():
