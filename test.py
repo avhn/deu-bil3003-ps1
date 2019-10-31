@@ -28,7 +28,10 @@ class ParseTests(unittest.TestCase):
         dataset = parse.parse_dataset()
         frequent_itemsets = generate.frequent_itemsets(0.1, dataset)
 
-        assert frequent_itemsets and len(frequent_itemsets) is len(dataset[0])
+        assert frequent_itemsets
+        assert len(frequent_itemsets) is len(dataset[0])
+        assert type(frequent_itemsets) is list
+        assert type(random.choice(frequent_itemsets)) is dict
 
 
 if __name__ == '__main__':
