@@ -24,10 +24,9 @@ class ParseTests(unittest.TestCase):
         item = random.choice(tuple(itemset))
         assert item and type(item) is tuple
 
-    def test_generate_frequent_itemsets(self):
+    def test_frequent_itemsets(self):
         dataset = parse.parse_dataset()
         frequent_itemsets = generate.frequent_itemsets(0.1, dataset)
-
         assert frequent_itemsets
         assert len(frequent_itemsets) is len(dataset[0])
         assert type(frequent_itemsets) is list
