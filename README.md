@@ -12,6 +12,8 @@ Technologies used in this project:
 
 ## Research
 
+Here's the what I generally used, [`a research paper from 1994 by IBM.`](http://www.vldb.org/conf/1994/P487.PDF)
+
 **The Apriori Principle:**
 
 > If an itemset is frequent, then all of its subsets must also be frequent. Conversely, if an subset is infrequent, then all of its supersets must be infrequent, too.
