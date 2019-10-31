@@ -1,16 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import os
 import math
+import random
 
 
-def contains(itemset: set, eliminated_itemsets: list):
-    """Determine if any of the eliminated itemset is subset of the given itemset"""
+def self_join(itemsets: list, length: int):
+    """
+    Self join a list of itemsets to the length.
+    Time complexity is O(n^2 * maximum_itemset_length) where n is length of itemsets.
 
-    for e_itemset in eliminated_itemsets:
-        if itemset <= e_itemset:
-            return True
-    return False
+    Returns:
+        Initial support count is 0. Representation as below:
+            dict{frozenset: 0, ...}
+    """
+
+    join = {}
+    for itemset1 in itemsets:
+        for itemset2 in itemsets:
+            union = itemset1.union(itemset2)
+            if len(union) == length:
+                join[union] = 0
+    return join
 
 
 def frequent_itemsets(support_threshold: float, dataset: list):
@@ -18,48 +28,49 @@ def frequent_itemsets(support_threshold: float, dataset: list):
     Generate frequent itemsets using Apriori algorithm.
 
     Args:
-        support_threshold: Minimum support threshold, floating value
+        support_threshold: Minimum support threshold
         dataset: Output of parse.parse_dataset
 
     Returns:
     """
 
-    # Clone to not modify original dataset object
-    dataset = dataset.copy()
-    dataset_len = len(dataset)
-    min_support_count = math.ceil(support_threshold * dataset_len)
+    # Clone to not modify original object
+    D = dataset.copy()
+    dataset_len = len(D)
+    minsup_count = math.ceil(support_threshold * dataset_len)
     # Maximum length of frequent itemset
-    max_itemset_len = len(dataset[0])
+    k_max = len(D[0])
 
-    # IMPORTANT: Indexes of C and F starts at 1 for the sake of simplicity,
-    # index 0 is empty, and will be disregarded with slicing operator.(e.g. [1:])
-    #
-    # Candidate itemsets
-    # [[itemset, support count], ...]
-    C = [[] for i in range(max_itemset_len + 1)]
-    # Frequent itemsets
-    L = [[] for i in range(max_itemset_len + 1)]
+    # Store both candidates and minsup counts in the hashtable.
+    C = dict()
+    # Index of L start at 1. L stores itemsets every level.
+    L = [[] for i in range(k_max + 1)]
+    # Representation of L:
+    #   L[[], list_1[frozenset(item, ...), ...], ..., list_k[frozenset(item, ...)]]
 
-    for k in range(1, max_itemset_len + 1):
-        # 1-itemsets
-        if k is 1:
-            counts = dict()
-            for itemset in dataset:
-                for item in itemset:
-                    counts[item] = counts.get(item, 0) + 1
+    k = 1
+    # 1-itemsets
 
-            for item in counts:
-                C[k].append(({item, }, counts[item]))
+    for itemset in dataset:
+        for item in itemset:
+            C[item] = C.get(item, 0) + 1
+    # pair -> frozenset, support_count
+    for item in C:
+        if not C[item] < minsup_count:
+            L[k].append(frozenset({item}))
 
-        # k-itemsets
-        else:
-            # TODO: Candidate generation
-            # Self join
-            # Pruning
+    # k-itemsets
+    for k in range(2, k_max + 1):
+        C.clear()
+        C = self_join(L[k - 1], k)
+        for t in D:
+            for c in C.keys():
+                if c <= t:
+                    C[c] = C[c] + 1
 
-            print(L[k - 1])
-            return None
+        for c in C.keys():
+            if not C[c] < minsup_count:
+                L[k].append(c)
 
-        for pair in C[k]:  # pair = itemset, support_count
-            if not pair[1] < min_support_count:
-                L[k].append(pair)
+    # Index started from 1, normalize before returning
+    return L[1:]
