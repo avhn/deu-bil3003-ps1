@@ -2,7 +2,7 @@
 
 
 def normalize(value: str):
-    """Convert a String object to floating or decimal if possible."""
+    """Convert a String object to floating or decimal and ? to None if possible."""
 
     value = value.strip()
     try:
@@ -28,7 +28,10 @@ def parse_dataset(filename: str = 'dataset.csv'):
     Returns:
         Parsed dataset as list of itemsets, where items are tuples.
         Pseudo representation as below:
-            list[set{tuple(ind, val), ...}, set{tuple(ind, val), ...}, ...]
+            list[frozenset{tuple(ind, val), ...}, frozenset{tuple(ind, val), ...}, ...]
+
+        Every single record is itemized by making them hashable with tuple(ind, val) to adapt
+        market basket problem.
     """
 
     if not filename:
@@ -45,5 +48,5 @@ def parse_dataset(filename: str = 'dataset.csv'):
                 itemset = set()
                 for j, item in enumerate(line):
                     itemset.add((indicators[j], normalize(item)))
-                itemsets.append(itemset)
+                itemsets.append(frozenset(itemset))
     return itemsets
