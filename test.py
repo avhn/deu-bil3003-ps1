@@ -1,6 +1,8 @@
 import unittest
 import random
+
 from problemset import parse
+from problemset import generate
 
 
 class ParseTests(unittest.TestCase):
@@ -18,16 +20,15 @@ class ParseTests(unittest.TestCase):
         itemsets = parse.parse_dataset()
         assert itemsets and type(itemsets) is list
         itemset = itemsets[0]
-        assert itemset and type(itemset) is set
+        assert itemset and type(itemset) is frozenset
         item = random.choice(tuple(itemset))
         assert item and type(item) is tuple
 
     def test_generate_frequent_itemsets(self):
         dataset = parse.parse_dataset()
+        frequent_itemsets = generate.frequent_itemsets(0.1, dataset)
 
-        pass
-
-        print("Unreachable statement")
+        assert frequent_itemsets and len(frequent_itemsets) is len(dataset[0])
 
 
 if __name__ == '__main__':
