@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-import random
 
 
 def self_join(itemsets: iter, length: int):
@@ -32,20 +31,18 @@ def frequent_itemsets(support_threshold: float, dataset: list):
         dataset: Output of parse.parse_dataset
 
     Returns:
+        List of dictionaries mapping frozen itemsets to support values at each level.
         Representation:
-            [level1[frequent_itemsets, support_count], ..., levelk[frequent_itemsets, support_count_looup]]
-        frequen
+            [level1{frozenset: support value, ...}, ..., levelk{frozenset: support value, ...}]
 
     """
 
-    # Clone to not modify original object
     D = dataset.copy()
     dataset_len = len(D)
     minsup_count = math.ceil(support_threshold * dataset_len)
     # Maximum length of frequent itemset
     k_max = len(D[0])
-
-    # Store candidates to suport counts in the hashtable.
+    # Map candidates to support counts
     C = dict()
     # Index of L starts at 1. L stores itemsets at every level.
     L = [dict() for i in range(k_max + 1)]
