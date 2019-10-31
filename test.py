@@ -24,6 +24,9 @@ class ParseTests(unittest.TestCase):
         item = random.choice(tuple(itemset))
         assert item and type(item) is tuple
 
+
+class AprioriTests(unittest.TestCase):
+
     def test_frequent_itemsets(self):
         dataset = parse.parse_dataset()
         frequent_itemsets = generate.frequent_itemsets(0.1, dataset)
