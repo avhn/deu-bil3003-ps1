@@ -4,7 +4,7 @@ import math
 import random
 
 
-def self_join(itemsets: list, length: int):
+def self_join(itemsets: iter, length: int):
     """
     Self join a list of itemsets to the length.
     Time complexity is O(n^2 * maximum_itemset_length) where n is length of itemsets.
@@ -32,6 +32,10 @@ def frequent_itemsets(support_threshold: float, dataset: list):
         dataset: Output of parse.parse_dataset
 
     Returns:
+        Representation:
+            [level1[frequent_itemsets, support_count], ..., levelk[frequent_itemsets, support_count_looup]]
+        frequen
+
     """
 
     # Clone to not modify original object
@@ -41,36 +45,31 @@ def frequent_itemsets(support_threshold: float, dataset: list):
     # Maximum length of frequent itemset
     k_max = len(D[0])
 
-    # Store both candidates and minsup counts in the hashtable.
+    # Store candidates to suport counts in the hashtable.
     C = dict()
-    # Index of L start at 1. L stores itemsets every level.
-    L = [[] for i in range(k_max + 1)]
-    # Representation of L:
-    #   L[[], list_1[frozenset(item, ...), ...], ..., list_k[frozenset(item, ...)]]
+    # Index of L starts at 1. L stores itemsets at every level.
+    L = [dict() for i in range(k_max + 1)]
 
-    k = 1
-    # 1-itemsets
+    for k in range(1, k_max + 1):
 
-    for itemset in dataset:
-        for item in itemset:
-            C[item] = C.get(item, 0) + 1
-    # pair -> frozenset, support_count
-    for item in C:
-        if not C[item] < minsup_count:
-            L[k].append(frozenset({item}))
+        # 1-itemsets
+        if k is 1:
+            for t in D:  # D for dataset, t for transaction
+                for item in t:
+                    item = frozenset({item})
+                    C[item] = C.get(item, 0) + 1
 
-    # k-itemsets
-    for k in range(2, k_max + 1):
-        C.clear()
-        C = self_join(L[k - 1], k)
-        for t in D:
-            for c in C.keys():
-                if c <= t:
-                    C[c] = C[c] + 1
+        # k-itemsets
+        else:
+            C = self_join(L[k - 1].keys(), k)
+            for t in D:
+                for c in C.keys():
+                    if c <= t:
+                        C[c] = C[c] + 1
 
         for c in C.keys():
             if not C[c] < minsup_count:
-                L[k].append(c)
+                L[k][c] = C[c] / dataset_len
 
     # Index started from 1, normalize before returning
     return L[1:]
