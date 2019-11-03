@@ -27,6 +27,16 @@ class ParseTests(unittest.TestCase):
 
 class AprioriTests(unittest.TestCase):
 
+    def test_apriori_gen(self):
+        dataset = parse.parse_dataset()
+        frequent_itemsets = generate.frequent_itemsets(0.05, dataset)
+        l = frequent_itemsets[0]
+        k = 2
+        C = generate.apriori_gen(l, k)
+        assert type(C) is dict
+        assert not C or random.choice(list(C.values())) is 0
+
+
     def test_frequent_itemsets(self):
         dataset = parse.parse_dataset()
         frequent_itemsets = generate.frequent_itemsets(0.05, dataset)
