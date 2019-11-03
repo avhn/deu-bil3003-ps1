@@ -27,7 +27,7 @@ def get_input():
             raise ValueError("Invalid metric option -> {}"
                              .format(metric_option))
 
-        min_threshold = float(input('Minimum threshold:\t'))
+        min_threshold = float(input('Minimum metric threshold:\t'))
 
         filepath = input(
             'Absolute filepath which contains comma seperated values[Enter for default]:\t')
