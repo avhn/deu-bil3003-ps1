@@ -12,9 +12,9 @@ class ParseTests(unittest.TestCase):
     sampleString = 'bla bla'
 
     def test_normalize(self):
-        assert int == type(parse.normalize(self.decimalString))
-        assert float == type(parse.normalize(self.floatString))
-        assert str == type(parse.normalize(self.sampleString))
+        assert int is type(parse.normalize(self.decimalString))
+        assert float is type(parse.normalize(self.floatString))
+        assert str is type(parse.normalize(self.sampleString))
 
     def test_parse_dataset(self):
         itemsets = parse.parse_dataset()
@@ -29,11 +29,16 @@ class AprioriTests(unittest.TestCase):
 
     def test_frequent_itemsets(self):
         dataset = parse.parse_dataset()
-        frequent_itemsets = generate.frequent_itemsets(0.1, dataset)
+        frequent_itemsets = generate.frequent_itemsets(0.05, dataset)
         assert frequent_itemsets
         assert len(frequent_itemsets) is len(dataset[0])
         assert type(frequent_itemsets) is list
-        assert type(random.choice(frequent_itemsets)) is dict
+        one_itemsets = frequent_itemsets[0]
+        assert type(one_itemsets) is set
+        assert len(one_itemsets) is 0 or type(random.sample(one_itemsets, 1)[0]) is frozenset
+
+    def test_association_rules(self):
+        pass
 
 
 if __name__ == '__main__':
