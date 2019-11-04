@@ -10,6 +10,21 @@ Technologies used in this project:
 - GitLab CI
 - Git
 
+## File Structure
+
+```
+source-code
+├── main.py
+├── test.py
+├── problemset
+│   ├── __init__.py
+│   ├── parse
+│   ├── generate
+│   ├── utils
+│   ├── interact
+```
+
+
 ## Research/Resources
 
 Here's the what I generally used, [`a research paper from 1994 by IBM.`](http://www.vldb.org/conf/1994/P487.PDF)
