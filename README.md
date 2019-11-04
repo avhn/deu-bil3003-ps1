@@ -10,10 +10,18 @@ Technologies used in this project:
 - GitLab CI
 - Git
 
-## Research
+## Research/Resources
 
 Here's the what I generally used, [`a research paper from 1994 by IBM.`](http://www.vldb.org/conf/1994/P487.PDF)
 
 **The Apriori Principle:**
 
 > If an itemset is frequent, then all of its subsets must also be frequent. Conversely, if an subset is infrequent, then all of its supersets must be infrequent, too.
+
+## Usage and notes
+
+- To run, just run the main.py file at the root:
+  ```python3
+  $ python3 main.py
+  ```
+- `problemset.parser` accepts csv format which indicates type of the value at the first line. This way the value is itemized by making a hashable immutable tuple as (indicator, value).
