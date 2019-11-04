@@ -47,6 +47,8 @@ def parse_dataset(filename: str = 'dataset.csv'):
             else:   # create itemset and add to itemsets
                 itemset = set()
                 for j, item in enumerate(line):
-                    itemset.add((indicators[j], normalize(item)))
+                    item = normalize(item)
+                    if item: # disregard missing values
+                        itemset.add((indicators[j], item))
                 itemsets.append(frozenset(itemset))
     return itemsets
