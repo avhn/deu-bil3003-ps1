@@ -3,6 +3,7 @@ import random
 
 from problemset import parse
 from problemset import generate
+from problemset import utils
 
 
 class ParseTests(unittest.TestCase):
@@ -48,7 +49,14 @@ class AprioriTests(unittest.TestCase):
         assert len(one_itemsets) is 0 or type(random.sample(one_itemsets, 1)[0]) is frozenset
 
     def test_association_rules(self):
-        pass
+        dataset = parse.parse_dataset()
+        frequent_itemsets = generate.frequent_itemsets(0.05, dataset)
+        association_rules = generate.association_rules(dataset, frequent_itemsets, utils.Metric.Confidence, 0.3)
+        assert association_rules and type(association_rules) is list
+        rule = association_rules[0]
+        assert type(rule[0]) is tuple
+        assert type(rule[1]) is float
+        assert type(rule[2]) is float
 
 
 if __name__ == '__main__':
