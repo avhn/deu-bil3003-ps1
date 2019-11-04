@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 
@@ -35,3 +36,15 @@ def lift(D: list, a: frozenset, b: frozenset):
     """Calculate lift value. Range: [0, inf]"""
 
     return confidence(D, a, b) / support(D, b)
+
+
+def print_and_write(string: str, file):
+    print(string)
+    file.write(string + os.linesep)
+
+
+def format_item(item):
+    return '{}: {}'.format(*item)
+
+def round_2(floating):
+    return round(floating, 2)

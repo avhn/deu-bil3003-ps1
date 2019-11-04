@@ -4,7 +4,11 @@ from itertools import chain
 from itertools import combinations
 import math
 
-from .utils import *
+from .utils import Metric
+from .utils import leverage
+from .utils import support
+from .utils import confidence
+from .utils import lift
 
 
 def self_join(itemsets: set, length: int):
@@ -134,7 +138,10 @@ def association_rules(D: list, L: list, metric: Metric, metric_threshold: float)
 
     Returns:
         List of tuples as association rules:
-            list[(frozenset|antecedent, frozenset|consequent), ...]
+            list[
+                ((frozenset|antecedent, frozenset|consequent), support(xUy), metric value), 
+                ...
+            ]
     """
 
     switch = {
@@ -148,7 +155,9 @@ def association_rules(D: list, L: list, metric: Metric, metric_threshold: float)
         for itemset in large_itemsets:
             for antecedent in antecedents(itemset):
                 consequent = itemset.difference(antecedent)
-                if not switch[metric](D, antecedent, consequent) < metric_threshold:
-                    rules.append((antecedent, consequent))
+                metric_value = switch[metric](D, antecedent, consequent)
+                if not metric_value < metric_threshold:
+                    rule = antecedent, consequent
+                    rules.append((rule, support(D, *rule), metric_value))
 
     return rules
