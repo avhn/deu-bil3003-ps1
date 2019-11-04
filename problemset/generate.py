@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from itertools import chain
 from itertools import combinations
 import math
 
@@ -29,7 +30,6 @@ def apriori_gen(large_itemsets: set, k: int):
     Generates candidate k-itemsets from k-1 large itemsets using a priori algorithm.
     * apriori-gen function described by Rakesh Agrawal and Ramakrishnan Srikant at 1994.
 
-
     Args:
         large_itemsets: k-1 large itemsets, set of frozensets
         k: length of itemsets to generate
@@ -44,6 +44,7 @@ def apriori_gen(large_itemsets: set, k: int):
         return dict()
 
     C = self_join(large_itemsets, k)
+
     # Prune candidates
     deletion_set = set()
     for candidate in C.keys():
@@ -51,7 +52,10 @@ def apriori_gen(large_itemsets: set, k: int):
             if subset not in large_itemsets:
                 deletion_set.add(candidate)
                 break
-    map(C.pop, deletion_set)
+    if 1 < k:
+        for d in deletion_set:
+            C.pop(d)
+
     return C
 
 
@@ -107,5 +111,32 @@ def frequent_itemsets(support_threshold: float, dataset: list):
     return L[1:]
 
 
-def association_rules(large_itemsets: list, metric: Metric, metric_threshold: float):
-    pass
+def antecedents(itemset: frozenset):
+    """
+    Generate possible antecedents for association rule generation.
+    * Doesn't generate a complete powerset.
+    """
+
+    l = len(itemset)
+    start = math.ceil(l / 2)
+    for subset in chain.from_iterable([combinations(itemset, i) for i in range(start, l)]):
+        yield frozenset(subset)
+
+
+def association_rules(L: list, metric: Metric, metric_threshold: float):
+    """
+
+    Args:
+
+
+    Returns:
+
+    """
+
+    # Candidate rules
+    C = dict()
+    for large_itemsets in L[1:]: # don't consider 1-itemsets
+        for itemset in large_itemsets:
+            for antecedent in antecedents(itemset):
+                C[antecedent] = itemset.difference(antecedent)
+    
