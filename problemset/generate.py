@@ -119,6 +119,10 @@ def frequent_itemsets(support_threshold: float, dataset: list):
 def antecedents(itemset: frozenset):
     """
     Generate possible antecedents for association rule generation.
+
+    Starts from math.ceil(len(itemset) / 2) to avoid different length dublicates.
+    You will still need to prune same length dublicates.
+
     * Doesn't generate a complete powerset.
     """
 
@@ -151,14 +155,20 @@ def association_rules(D: list, L: list, metric: Metric, metric_threshold: float)
         Metric.Leverage: leverage
     }
 
+    # if (X, Y) has both same length, save as (Y, X) to later detect duplicates
+    same_length_duplicates = set()
     rules = []
-    for large_itemsets in L[1:]: # don't consider 1-itemsets
+    for large_itemsets in L[1:]:  # don't consider 1-itemsets
         for itemset in large_itemsets:
             for antecedent in antecedents(itemset):
                 consequent = itemset.difference(antecedent)
                 metric_value = switch[metric](D, antecedent, consequent)
-                if not metric_value < metric_threshold:
-                    rule = antecedent, consequent
+                if len(antecedent) is len(consequent):
+                    # add reversely, so that only first one of the duplicates will be added to rules
+                    same_length_duplicates.add((consequent, antecedent))
+                    
+                rule = antecedent, consequent
+                if not metric_value < metric_threshold and rule not in same_length_duplicates:
                     rules.append((rule, support(D, *rule), metric_value))
 
     return rules
