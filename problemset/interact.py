@@ -23,20 +23,21 @@ validation_switch = {
     Metric.Lift: lambda x: 0 <= x
 }
 
+
 def get_input():
     """
     Get corresponding inputs from user.
 
     Returns:
         A tuple such as:
-            (minimum support value, metric, metric value, filepath to parse)
+            (minimum support value, metric, minimum metric value, filepath to parse)
     """
     
     print(LINE + os.linesep)
     try:
-        minsup = float(input('Minimum support value:\t'))
-        if not 0 <= minsup <= 1:
-            raise ValueError("Invalid support value: " + minsup)
+        minsup_threshold = float(input('Minimum support value:\t'))
+        if not 0 <= minsup_threshold <= 1:
+            raise ValueError("Invalid support value: " + minsup_threshold)
 
         metric = int(
             input('Choose metric. Confidence[1] / Lift[2] / Leverage[3]:\t'))
@@ -48,14 +49,14 @@ def get_input():
             raise ValueError("Invalid metric option -> {}"
                              .format(metric))
 
-        minsup_threshold = float(input('Minimum metric threshold:\t'))
-        if not validation_switch[metric](minsup_threshold):
-            raise ValueError("Invalid {} value: {}".format(name_switch[metric], minsup_threshold))
+        metric_threshold = float(input('Minimum metric threshold:\t'))
+        if not validation_switch[metric](metric_threshold):
+            raise ValueError("Invalid {} value: {}".format(name_switch[metric], metric_threshold))
 
         filepath = input(
             'Absolute filepath which contains comma seperated values [Enter for default]:\t')
 
-        return minsup, metric, minsup_threshold, filepath
+        return minsup_threshold, metric, metric_threshold, filepath
 
     except (ValueError, TypeError) as e:
         print("{}Invalid input:{}\t{}"
@@ -76,7 +77,7 @@ def get_input():
 def print_frequent_itemsets(frequent_itemsets: list, filepath: str):
     """
     Args:
-        frequent_itemset: Output of .generate.frequent_itemsets
+        frequent_itemsets: Output of .generate.frequent_itemsets
         filepath: Name of a file or absolute filepath
     """
     
@@ -101,17 +102,17 @@ def print_association_rules(association_rules: list, filepath: str, metric: Metr
     
     with open(filepath, 'a+') as file:
         print_and_write(os.linesep + LINE, file)
-        print_and_write("{}Association rules:{}".format(*(os.linesep * 2)), file)
+        print_and_write("{}Association rules:{}".format(*os.linesep * 2), file)
         for i, rule in enumerate(association_rules):
-            rule, support, metric_value  = rule
+            rule, support, metric_value = rule
 
             string = INDENT + '{}. IF '.format(i + 1)
-            for item in rule[0]: # antecedent
+            for item in rule[0]:  # antecedent
                 string += format_item(item) + ' AND '
             string = string[:-4] + "THEN "
-            for item in rule[1]: # consequent
+            for item in rule[1]:  # consequent
                 string += format_item(item) + ' AND '
             string = string[:-4] + os.linesep + INDENT \
-                    + '-> with Support: {} and {}: {}' .format(round_2(support), name_switch[metric], round_2(metric_value)) \
-                    + os.linesep
+                + '-> with Support: {} and {}: {}'.format(round_2(support), name_switch[metric], round_2(metric_value)) \
+                + os.linesep
             print_and_write(string, file)

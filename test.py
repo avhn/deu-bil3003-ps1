@@ -37,7 +37,6 @@ class AprioriTests(unittest.TestCase):
         assert type(C) is dict
         assert not C or random.choice(list(C.values())) is 0
 
-
     def test_frequent_itemsets(self):
         dataset = parse.parse_dataset()
         frequent_itemsets = generate.frequent_itemsets(0.05, dataset)

@@ -5,12 +5,8 @@ import os
 from problemset import interact
 from problemset import parse
 from problemset import generate
-from problemset.utils import Metric
 
 LOG_FILE = 'out.txt'
-
-def dev_test():
-    pass
 
 
 def main():

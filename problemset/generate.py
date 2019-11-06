@@ -20,6 +20,7 @@ def self_join(itemsets: set, length: int):
         Self join which maps every item to 0. Representation as below:
             dict{frozenset: 0, ...}
     """
+
     join = {}
     for itemset1 in itemsets:
         for itemset2 in itemsets:

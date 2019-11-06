@@ -14,7 +14,6 @@ Technologies used in this project:
 ## File Structure
 
 ```
-source-code
 ├── main.py
 ├── test.py
 ├── problemset
