@@ -46,5 +46,6 @@ def print_and_write(string: str, file):
 def format_item(item):
     return '{}: {}'.format(*item)
 
+
 def round_2(floating):
     return round(floating, 2)
